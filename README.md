@@ -69,41 +69,85 @@ URL: `http://52.26.243.255`
 3. Make sure git related files are not accessible from the browser
   - Create an `.htaccess` file in the project root directory
   - add the following line to the file and save: `Redirect 404 /\.git`
+4. In order to read and write to the uploads folder:
+  - move the `uploads` folder up into the `static` folder
+  - change ownership of the `uploads` folder, along with the files already in the folder to the `www-data` user and group. From inside the `uploads` folder, run:
+
+  `sudo chown -R www-data:www-data .`
+  - in `application.py`, update the constant `UPLOADS_FOLDER` to the absolute path to the `uploads` folder:
+
+  `UPLOADS_FOLDER = r'/var/www/<PROJECT_FOLDER>/static/uploads/'`
+5. Change references to `client_secrets.json` to the absolute path of the file
+
+  `CLIENT_ID = json.loads(open(r'/var/www/<PROJECT_FOLDER>/client_secrets.json', 'r').read())['web']['client_id']`
+
+  `oauth_flow = flow_from_clientsecrets(r'/var/www/<PROJECT_FOLDER>/client_secrets.json', scope='')`
 
 ### Configure Apache
 1. Create an WSGI file named `catalog.wsgi` to act as an interface between Apache and the application. Place it in the application's root directory:
 
-```python
-#!/usr/bin/python
-import sys
-import logging
-logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/var/www/<PROJECT_FOLDER>/")
+  ```python
+  #!/usr/bin/python
+  import sys
+  import logging
+  logging.basicConfig(stream=sys.stderr)
+  sys.path.insert(0,"/var/www/<PROJECT_FOLDER>/")
 
-from application import app as application
-application.secret_key = '<APP_SECRET_KEY>'
-```
+  from application import app as application
+  application.secret_key = '<APP_SECRET_KEY>'
+  ```
 2. In the WSGI file above, replace the PROJECT_FOLDER and APP_SECRET_KEY to match the application.
 3. Create an Apache config file for the app at `/etc/apache2/sites-available/catalog.conf`
 
-```
-<VirtualHost *:80>
-                ServerName <SITE_IP_ADDRESS>
-                WSGIScriptAlias / /var/www/<PROJECT_FOLDER>/catalog.wsgi
-                <Directory /var/www/<PROJECT_FOLDER>/>
-                        Order allow,deny
-                        Allow from all
-                </Directory>
-                Alias /static /var/www/<PROJECT_FOLDER>/static
-                <Directory /var/www/<PROJECT_FOLDER>/static/>
-                        Order allow,deny
-                        Allow from all
-                </Directory>
-                ErrorLog ${APACHE_LOG_DIR}/error.log
-                LogLevel warn
-                CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-```
+  ```
+  <VirtualHost *:80>
+                  ServerName <SITE_IP_ADDRESS>
+                  WSGIScriptAlias / /var/www/<PROJECT_FOLDER>/catalog.wsgi
+                  <Directory /var/www/<PROJECT_FOLDER>/>
+                          Order allow,deny
+                          Allow from all
+                  </Directory>
+                  Alias /static /var/www/<PROJECT_FOLDER>/static
+                  <Directory /var/www/<PROJECT_FOLDER>/static/>
+                          Order allow,deny
+                          Allow from all
+                  </Directory>
+                  ErrorLog ${APACHE_LOG_DIR}/error.log
+                  LogLevel warn
+                  CustomLog ${APACHE_LOG_DIR}/access.log combined
+  </VirtualHost>
+  ```
 4. In the config file above, replace <SITE_IP_ADDRESS> and each instance of <PROJECT_FOLDER> to match the ip address of the app and the folder the application is located in.
 5. Restart Apache: `sudo service apache2 restart`
 
+### Set-up Database
+1. Create a postgres user named `catalog`. Set a password for the user and give the user access to create databases. Set superuser property for `catalog` to no to limit permissions.
+2. Create a database named `catalog`.
+3. In the files, database_setup.py, lotsofitems.py, and application.py changed (substituting PASSWORD with catalog's password):
+
+  `engine = create_engine('sqlite:///hockeyshop.db')`
+
+  to
+
+  `engine = create_engine(‘postgresql://catalog:<PASSWORD>@localhost/catalog’)`
+4. Setup the database: `sudo python database_setup.py`
+5. Populate the database: `sudo python lotsofitems.py`
+
+### Ban Attackers
+Configure fail2ban in order to lock out ip addresses that have multiple failed login attempts. We'll leave the defaults for number of failed ssh attempts (6) and lock out time (10 minutes).
+1. copy `/etc/fail2ban/jail.conf` to `/etc/fail2ban/jail.local`
+2. edit `/etc/fail2ban/jail.local` with the following settings (replacing <EMAIL_ADDRESS> with a valid email address):
+  - destemail = <EMAIL_ADDRESS>
+  - action = %(action_mwl)s
+  - change the ssh port to 2200
+3. Save the changes, then stop and start the fail2ban service
+  - `sudo service fail2ban stop`
+  - `sudo service fail2ban start`
+
+### Enable Automatic Security updates
+Since we already installed `unattended-upgrades`, we can set up automatic security updates by:
+1. Run: `sudo dpkg-reconfigure -plow unattended-upgrades`
+2. On the next screen, select yes to automatically download and install stable updates.
+
+### System Monitoring
+System monitoring is handled with the installed `Glances` package. To monitor the system, from the command line run: `sudo glances`
