@@ -135,6 +135,7 @@ URL: `http://52.26.243.255`
 
 ### Ban Attackers
 Configure fail2ban in order to lock out ip addresses that have multiple failed login attempts. We'll leave the defaults for number of failed ssh attempts (6) and lock out time (10 minutes).
+
 1. Copy `/etc/fail2ban/jail.conf` to `/etc/fail2ban/jail.local`
 2. Edit `/etc/fail2ban/jail.local` with the following settings (replacing <EMAIL_ADDRESS> with a valid email address):
   - destemail = <EMAIL_ADDRESS>
@@ -146,6 +147,7 @@ Configure fail2ban in order to lock out ip addresses that have multiple failed l
 
 ### Enable Automatic Security updates
 Since we already installed `unattended-upgrades`, we can set up automatic security updates by:
+
 1. Run: `sudo dpkg-reconfigure -plow unattended-upgrades`
 2. On the next screen, select yes to automatically download and install stable updates.
 
