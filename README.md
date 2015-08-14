@@ -41,22 +41,22 @@ URL: `http://52.26.243.255`
   - `sudo apt-get update`
   - `sudo apt-get upgrade`
 2. Install packages using `sudo apt-get install`:
-  - ntp daemon: ntp
-  - apache web server: apache2
-  - mod-wsgi: libapache2-mod-wsgi
-  - PostgreSQL: postgresql
-  - Git revision control: git
-  - Python package handler: pip
-  - Fail2Ban authentication locking: fail2ban
-  - Development libraries: libpq-dev python-dev
-  - Automatic updates: unattended-upgrades
+  - ntp daemon: `ntp`
+  - apache web server: `apache2`
+  - mod-wsgi: `libapache2-mod-wsgi`
+  - PostgreSQL: `postgresql`
+  - Git revision control: `git`
+  - Python package handler: `pip`
+  - Fail2Ban authentication locking: `fail2ban`
+  - Development libraries: `libpq-dev python-dev`
+  - Automatic updates: `unattended-upgrades`
 3. Install Python packages using `sudo pip install`:
-  - Flask web framework: Flask
-  - http libraries: httplib2
-  - Google API: google_api_python_client
-  - SQLAlchemy SQL libraries: SQLAlchemy
-  - Postgres libraries: psycopg2
-  - System Monitoring: Glances
+  - Flask web framework: `Flask`
+  - http libraries: `httplib2`
+  - Google API: `google_api_python_client`
+  - SQLAlchemy SQL libraries: `SQLAlchemy`
+  - Postgres libraries: `psycopg2`
+  - System Monitoring: `Glances`
 
 ### Configure Server Timezone
 1. Run `sudo dpkg-reconfigure tzdata`
@@ -153,14 +153,14 @@ Since we already installed `unattended-upgrades`, we can set up automatic securi
 System monitoring is handled with the installed `Glances` package. To monitor the system, from the command line run: `sudo glances`
 
 ## Resources
-- [Udacity's Configuring Linux Web Servers Course](https://www.udacity.com/course/configuring-linux-web-servers--ud299)
-- [DigitalOcean: Initial Server Setup](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04)
-- [DigitalOcean: Additional Recommended Steps for New Ubuntu 14.04 Servers](https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers)
-- [StackOverflow: Make .git directory web inaccessible](http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible)
-- To discover which user and group needs write access to the uploads folder: http://unix.stackexchange.com/questions/41241/how-to-check-which-apache-group-i-can-use-for-the-web-server-to-write
-- [DigitalOcean: How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
-- [PostgreSQL: Create User](http://www.postgresql.org/docs/9.1/static/app-createuser.html)
-- [Udacity Discussion Forums: Google sign-in problems](https://discussions.udacity.com/t/google-sign-in-problems/28191)
-- [DigitalOcean: How To Install and Use Fail2ban on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-fail2ban-on-ubuntu-14-04)
-- [Automatic Updates](https://help.ubuntu.com/lts/serverguide/automatic-updates.html)
-- [Glances](https://pypi.python.org/pypi/Glances)
+-[Udacity's Configuring Linux Web Servers Course](https://www.udacity.com/course/configuring-linux-web-servers--ud299)
+-[DigitalOcean: Initial Server Setup](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04)
+-[DigitalOcean: Additional Recommended Steps for New Ubuntu 14.04 Servers](https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers)
+-[StackOverflow: Make .git directory web inaccessible](http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible)
+-To discover which user and group needs write access to the uploads folder: http://unix.stackexchange.com/questions/41241/how-to-check-which-apache-group-i-can-use-for-the-web-server-to-write
+-[DigitalOcean: How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
+-[PostgreSQL: Create User](http://www.postgresql.org/docs/9.1/static/app-createuser.html)
+-[Udacity Discussion Forums: Google sign-in problems](https://discussions.udacity.com/t/google-sign-in-problems/28191)
+-[DigitalOcean: How To Install and Use Fail2ban on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-fail2ban-on-ubuntu-14-04)
+-[Automatic Updates](https://help.ubuntu.com/lts/serverguide/automatic-updates.html)
+-[Glances](https://pypi.python.org/pypi/Glances)
