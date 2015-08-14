@@ -65,7 +65,7 @@ URL: `http://52.26.243.255`
 ### Clone and Configure Web Application
 1. Navigate to `/var/www`
 2. Clone repository from GitHub here:
-  - 'sudo git clone <REPOSITORY URL>'
+  - `sudo git clone <REPOSITORY URL>`
 3. Make sure git related files are not accessible from the browser
   - Create an `.htaccess` file in the project root directory
   - add the following line to the file and save: `Redirect 404 /\.git`
